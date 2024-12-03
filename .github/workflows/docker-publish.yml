@@ -5,9 +5,6 @@ on:
     - cron: '0 0 * * 0' # Runs weekly at midnight on Sunday
   workflow_dispatch: # Allows manual triggering
 
-permissions:
-  contents: write
-
 env:
   IMAGE_NAME: ${{ github.repository }}
 
@@ -33,7 +30,7 @@ jobs:
           # Parse the version and increment the minor version
           VERSION=${LATEST_TAG#v}
           IFS='.' read -ra PARTS <<< "$VERSION"
-          NEW_VERSION="v${PARTS[0]}.$(PARTS[1]((PARTS[2] + 1))"
+          NEW_VERSION="v${PARTS[0]}.$((PARTS[1] + 1)).0"
           echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
       - name: Push new version tag
