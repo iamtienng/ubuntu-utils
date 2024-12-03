@@ -82,6 +82,7 @@ jobs:
           
       - name: Extract Docker metadata
         id: meta
+        uses: docker/metadata-action@v5.5.1
         run: |
           echo "tags=latest,${{ env.NEW_VERSION }}" >> $GITHUB_ENV
 
