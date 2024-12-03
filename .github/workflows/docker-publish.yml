@@ -83,10 +83,8 @@ jobs:
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5.5.1
-        with:
-          images: |
-            ${{ env.IMAGE_NAME }}
-            ghcr.io/${{ env.IMAGE_NAME }}
+        run: |
+          echo "tags=latest,${{ env.NEW_VERSION }}" >> $GITHUB_ENV
 
       - name: Build and push Docker image
         id: build-and-push
@@ -94,8 +92,9 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: |
+            ${{ env.IMAGE_NAME }}:latest
+            ${{ env.IMAGE_NAME }}:${{ env.NEW_VERSION }}
 
       - name: Sign the published Docker image
         if: ${{ github.event_name != 'pull_request' }}
