@@ -1,15 +1,47 @@
 name: Docker
 
 on:
-  push:
-    tags: [ 'v*.*.*' ]
-  release:
-    types: [published]
+  schedule:
+    - cron: '0 0 * * 0' # Runs weekly at midnight on Sunday
+  workflow_dispatch: # Allows manual triggering
 
 env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get the latest version tag
+        id: get-tag
+        run: |
+          # Fetch tags and get the latest
+          git fetch --tags
+          LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
+          echo "LATEST_TAG=${LATEST_TAG:-v0.0.0}" >> $GITHUB_ENV
+
+      - name: Increment minor version
+        id: bump-version
+        run: |
+          # Parse the version and increment the minor version
+          VERSION=${LATEST_TAG#v}
+          IFS='.' read -ra PARTS <<< "$VERSION"
+          NEW_VERSION="v${PARTS[0]}.$((PARTS[1] + 1)).0"
+          echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
+
+      - name: Push new version tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag $NEW_VERSION
+          git push origin $NEW_VERSION
+
   build-and-push:
     runs-on: ubuntu-latest
     permissions:
