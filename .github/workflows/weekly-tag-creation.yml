@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: '0 0 * * 0' # Runs every Sunday at midnight UTC
   workflow_dispatch: # Allows manual triggering of the workflow
+  
+env:
+  GH_TOKEN: ${{ github.token }}
 
 jobs:
   create-new-tag:
