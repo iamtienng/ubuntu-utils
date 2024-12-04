@@ -2,14 +2,14 @@ name: Weekly Tag Creation
 
 on:
   schedule:
-    - cron: '0 0 * * 0' # Runs every Sunday at midnight UTC
-  workflow_dispatch: # Allows manual triggering of the workflow
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
 
 jobs:
   create-new-tag:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Required to push tags to the repository
+      contents: write
 
     steps:
       - name: Checkout repository
