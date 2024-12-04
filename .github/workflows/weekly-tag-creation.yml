@@ -4,9 +4,6 @@ on:
   schedule:
     - cron: '0 0 * * 0' # Runs every Sunday at midnight UTC
   workflow_dispatch: # Allows manual triggering of the workflow
-  
-env:
-  GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
 jobs:
   create-new-tag:
@@ -41,6 +38,8 @@ jobs:
           echo "new_tag=$new_tag" >> $GITHUB_ENV
 
       - name: Push the new tag
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
