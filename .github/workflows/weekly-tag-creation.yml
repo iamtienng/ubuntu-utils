@@ -9,7 +9,7 @@ jobs:
   create-new-tag:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write # Required to push tags to the repository
 
     steps:
       - name: Checkout repository
@@ -38,10 +38,9 @@ jobs:
           echo "new_tag=$new_tag" >> $GITHUB_ENV
 
       - name: Push the new tag
-        env:
-          PAT: ${{ secrets.PERSONAL_ACCESS_TOKEN }} # Use your PAT secret
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git tag ${{ env.new_tag }}
-          git push https://${{ env.PAT }}@github.com/${{ github.repository }} ${{ env.new_tag }}
+          git push origin ${{ env.new_tag }}
+          gh workflow run docker-publish.yml --ref ${{ env.new_tag }}
