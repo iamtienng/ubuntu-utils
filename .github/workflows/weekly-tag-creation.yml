@@ -46,4 +46,4 @@ jobs:
           git config user.email "actions@github.com"
           git tag ${{ env.new_tag }}
           git push origin ${{ env.new_tag }}
-          gh workflow run docker-publish.yml --ref ${{ env.new_tag }}
+          gh workflow run docker-build-and-push.yml --ref ${{ env.new_tag }}
