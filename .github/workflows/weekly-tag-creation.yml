@@ -35,7 +35,7 @@ jobs:
           major=$(echo $latest_tag | cut -d. -f1 | cut -c2-)
           minor=$(echo $latest_tag | cut -d. -f2)
           patch=$(echo $latest_tag | cut -d. -f3)
-          new_patch=$((patch + 1))
+          new_patch=$((patch + 2))
           new_tag="v$major.$minor.$new_patch"
           echo "New tag: $new_tag"
           echo "new_tag=$new_tag" >> $GITHUB_ENV
