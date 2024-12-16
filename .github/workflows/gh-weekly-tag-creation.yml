@@ -2,7 +2,7 @@ name: Weekly Tag Creation
 
 on:
   schedule:
-    - cron: '0 8 * * 1'
+    - cron: "0 8 * * 1"
   workflow_dispatch:
 
 jobs:
@@ -21,7 +21,7 @@ jobs:
       - name: Determine the latest tag
         id: get-latest-tag
         run: |
-          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` || echo "v0.0.0")
+          latest_tag=$(git ls-remote -q --tags --sort=committerdate | grep -o 'v.*' | sort -Vr | head -1)
           echo "Latest tag: $latest_tag"
           echo "latest_tag=$latest_tag" >> $GITHUB_ENV
 
