@@ -16,6 +16,8 @@ RUN apt-get update && \
     htop \
     wget \
     git \
+    gnupg \
+    unzip \
     && apt-get clean
 
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
