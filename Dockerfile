@@ -18,6 +18,7 @@ RUN apt-get update && \
     git \
     gnupg \
     unzip \
+    tmux \
     && apt-get clean
 
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
